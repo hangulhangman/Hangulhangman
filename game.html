@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <title>한글 행맨!</title>
+
+  <style>
+
+    body {
+
+      background: linear-gradient(145deg, #fff3e0, #fce4ec);
+
+      font-family: '맑은 고딕', sans-serif;
+
+      text-align: center;
+
+      padding: 40px;
+
+      color: #444;
+
+    }
+
+
+
+    h1 {
+
+      font-size: 42px;
+
+      color: #ff7043;
+
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+
+      margin-bottom: 40px;
+
+    }
+
+
+
+    .word-box {
+
+      display: flex;
+
+      justify-content: center;
+
+      margin-bottom: 30px;
+
+    }
+
+
+
+    .letter {
+
+      width: 70px;
+
+      height: 80px;
+
+      border: 3px solid #ffab91;
+
+      border-radius: 15px;
+
+      margin: 0 8px;
+
+      font-size: 42px;
+
+      line-height: 80px;
+
+      background: white;
+
+      position: relative;
+
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+
+      transition: transform 0.2s;
+
+    }
+
+
+
+    .letter:hover {
+
+      transform: scale(1.05);
+
+    }
+
+
+
+    .mark {
+
+      position: absolute;
+
+      top: -28px;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      font-size: 32px;
+
+      opacity: 1;
+
+      transition: opacity 1s ease;
+
+      pointer-events: none;
+
+      user-select: none;
+
+      font-weight: bold;
+
+      animation: pop 0.3s ease;
+
+    }
+
+
+
+    @keyframes pop {
+
+      0% { transform: translateX(-50%) scale(0.6); opacity: 0; }
+
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+
+    }
+
+
+
+    .green { color: #4caf50; }
+
+    .yellow { color: #ffeb3b; text-shadow: 0 0 5px #999; }
+
+    .red { color: #f44336; }
+
+
+
+    input[type="text"] {
+
+      font-size: 26px;
+
+      padding: 10px 14px;
+
+      width: 80px;
+
+      text-align: center;
+
+      border: 2px solid #ffab91;
+
+      border-radius: 12px;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+      transition: all 0.2s ease-in-out;
+
+    }
+
+
+
+    input[type="text"]:focus {
+
+      outline: none;
+
+      border-color: #ff7043;
+
+      box-shadow: 0 0 10px #ffab91;
+
+    }
+
+
+
+    button {
+
+      font-size: 20px;
+
+      padding: 10px 18px;
+
+      margin-left: 12px;
+
+      background: linear-gradient(to right, #ffccbc, #ffe0b2);
+
+      border: none;
+
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      transition: background 0.3s, transform 0.2s;
+
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+    }
+
+
+
+    button:hover {
+
+      background: linear-gradient(to right, #ffb74d, #ffcc80);
+
+      transform: scale(1.05);
+
+    }
+
+
+
+  .hangman {
+
+    width: 240px;
+
+    height: 260px;
+
+    margin: 0 auto 30px;
+
+    position: relative;
+
+    background: #f0f0f0;
+
+    border-radius: 16px;
+
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+
+  }
+
+
+
+  .stick {
+
+    position: absolute;
+
+    background: linear-gradient(to bottom, #555, #222);
+
+    border-radius: 4px;
+
+  }
+
+
+
+  .base {
+
+    width: 120px;
+
+    height: 10px;
+
+    bottom: 0;
+
+    left: 0;
+
+    background: linear-gradient(to right, #bbb, #999);
+
+  }
+
+
+
+  .pole {
+
+    width: 10px;
+
+    height: 200px;
+
+    bottom: 0;
+
+    left: 55px;
+
+    background: linear-gradient(to bottom, #ccc, #999);
+
+    border-radius: 5px;
+
+  }
+
+
+
+  .top-bar {
+
+    width: 90px;
+
+    height: 10px;
+
+    top: 0;
+
+    left: 55px;
+
+    background: linear-gradient(to right, #ccc, #aaa);
+
+    border-radius: 5px;
+
+  }
+
+
+
+  .rope {
+
+    width: 4px;
+
+    height: 35px;
+
+    top: 10px;
+
+    left: 138px;
+
+    background: linear-gradient(to bottom, #eee, #aaa);
+
+    border-radius: 2px;
+
+  }
+
+
+
+  .head {
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 50%;
+
+    border: 4px solid #333;
+
+    top: 45px;
+
+    left: 120px;
+
+    background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+
+    display: none;
+
+  }
+
+
+
+  .body {
+
+    width: 6px;
+
+    height: 60px;
+
+    top: 81px;
+
+    left: 136px;
+
+    background: #444;
+
+    border-radius: 3px;
+
+    display: none;
+
+  }
+
+
+
+  .arm-left {
+
+    width: 34px;
+
+    height: 6px;
+
+    top: 100px;
+
+    left: 103px;
+
+    transform: rotate(-30deg);
+
+    background: #444;
+
+    border-radius: 3px;
+
+    display: none;
+
+  }
+
+
+
+  .arm-right {
+
+    width: 34px;
+
+    height: 6px;
+
+    top: 100px;
+
+    left: 136px;
+
+    transform: rotate(30deg);
+
+    background: #444;
+
+    border-radius: 3px;
+
+    display: none;
+
+  }
+
+
+
+  .leg-left {
+
+    width: 34px;
+
+    height: 6px;
+
+    top: 140px;
+
+    left: 103px;
+
+    transform: rotate(135deg);
+
+    background: #333;
+
+    border-radius: 3px;
+
+    display: none;
+
+  }
+
+
+
+  .leg-right {
+
+    width: 34px;
+
+    height: 6px;
+
+    top: 140px;
+
+    left: 136px;
+
+    transform: rotate(-135deg);
+
+    background: #333;
+
+    border-radius: 3px;
+
+    display: none;
+
+  }
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+
+<h1>한글 행맨!</h1>
+
+<div class="hangman">
+
+  <div class="stick base"></div>
+
+  <div class="stick pole"></div>
+
+  <div class="stick top-bar"></div>
+
+  <div class="stick rope"></div>
+
+  <div class="stick head" id="part1"></div>
+
+  <div class="stick body" id="part2"></div>
+
+  <div class="stick arm-left" id="part3"></div>
+
+  <div class="stick arm-right" id="part4"></div>
+
+  <div class="stick leg-left" id="part5"></div>
+
+  <div class="stick leg-right" id="part6"></div>
+
+</div>
+
+
+
+<div class="word-box" id="wordDisplay"></div>
+
+
+
+<input type="text" id="input" maxlength="1" autocomplete="off" />
+
+<button onclick="guess()">입력</button>
+
+<button id="restartBtn" style="display:none; margin-top:20px; font-size:18px; padding:10px 20px; border-radius:10px; cursor:pointer;">
+
+  돌아가기
+
+</button>
+
+
+
+
+
+<script>
+
+  // 주제별 단어 목록
+
+const wordLists = {
+
+  technicalTerms: [
+
+  "인공지능", "블록체인", "빅데이터", "클라우드", "머신러닝",
+
+  "딥러닝", "사이버보안", "양자컴퓨팅", "유전공학", "신경망",
+
+  "반도체", "바이오테크", "나노기술", "자동화", "정보통신",
+
+  "전력공학", "열역학", "통계학", "유체역학", "광학",
+
+  "암호화", "전자상거래", "소프트웨어", "하드웨어", "운영체제",
+
+  "인증서버", "데이터베이스", "네트워크", "인터페이스", "센서기술"
+
+],
+
+
+
+  animalWords: [
+
+  "사자", "호랑이", "코끼리", "기린", "원숭이",
+
+  "판다", "캥거루", "하마", "코뿔소", "악어",
+
+  "앵무새", "부엉이", "참새", "독수리", "펭귄",
+
+  "돌고래", "바다거북", "개구리", "염소", "돼지",
+
+  "닭갈비", "오리새", "칠면조", "벌레", "개미",
+
+  "나비", "잠자리", "코브라", "도마뱀", "다람쥐",
+
+  "황새", "수달", "오소리", "고슴도치", "두루미",
+
+  "고릴라", "침팬지", "바다사자", "물개", "갈매기",
+
+  "호저", "족제비", "수염고래", "장수풍뎅이", "멧돼지",
+
+  "하이에나", "비버", "코알라", "오랑우탄", "라쿤",
+
+  "야생토끼", "펠리컨", "뱀장어", "범고래", "까마귀",
+
+  "독수리", "코끼리", "청설모", "사슴벌레", "햄스터"
+
+],
+
+  computer: ["컴퓨터", "인터넷", "자바스크립트", "프로그래밍", "마우스"],
+
+  daily: ["이리듐"]
+
+};
+
+
+
+// ★ 버그 수정 부분: all 키 추가 (all은 모든 단어 합친 것)
+
+wordLists.all = [
+
+  ...wordLists.technicalTerms,
+
+  ...wordLists.animalWords,
+
+  ...wordLists.computer,
+
+  ...wordLists.daily
+
+];
+
+
+
+// URL 파라미터에서 topic 가져오기
+
+function getTopicFromURL() {
+
+  const params = new URLSearchParams(window.location.search);
+
+  return params.get("topic") || "all";  // 기본 all
+
+}
+
+
+
+const topic = getTopicFromURL();
+
+const answers = wordLists[topic] || wordLists["all"];
+
+let answer = answers[Math.floor(Math.random() * answers.length)];
+
+
+
+const 초성 = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".split("");
+
+const 중성 = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ".split("");
+
+const 종성 = ["", "ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ","ㅁ","ㅂ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+
+
+
+let lives = 6;
+
+
+
+function decompose(k) {
+
+  if (!k) return null;
+
+  const code = k.charCodeAt(0) - 0xAC00;
+
+  if (code < 0 || code > 11171) return null;
+
+  const ch = Math.floor(code / 588);
+
+  const j = Math.floor((code - (ch * 588)) / 28);
+
+  const jh = code % 28;
+
+  return [초성[ch], 중성[j], 종성[jh]];
+
+}
+
+
+
+function render() {
+
+  const container = document.getElementById("wordDisplay");
+
+  container.innerHTML = "";
+
+  for (let i = 0; i < answer.length; i++) {
+
+    const span = document.createElement("div");
+
+    span.className = "letter";
+
+    span.textContent = "";
+
+    container.appendChild(span);
+
+  }
+
+}
+
+
+
+function showMark(index, color) {
+
+  const boxes = document.getElementsByClassName("letter");
+
+  if (index < 0 || index >= boxes.length) return;
+
+  const box = boxes[index];
+
+  const mark = document.createElement("div");
+
+  mark.className = `mark ${color}`;
+
+  mark.textContent = "!";
+
+  box.appendChild(mark);
+
+  setTimeout(() => { mark.style.opacity = 0; }, 1000);
+
+  setTimeout(() => { mark.remove(); }, 2000);
+
+}
+
+
+
+function showNextHangmanPart() {
+
+  const partId = 6 - lives;
+
+  const part = document.getElementById("part" + partId);
+
+  if (part) part.style.display = "block";
+
+}
+
+
+
+let gameOver = false;
+
+
+
+function guess() {
+
+  const input = document.getElementById("input");
+
+  const char = input.value.trim();
+
+  input.value = "";
+
+  if (!char || gameOver) return;
+
+
+
+  let found = false;
+
+
+
+  // 완성된 글자 입력 시 해당 칸에 표시
+
+  if (char.length === 1 && /[가-힣]/.test(char)) {
+
+    const boxes = document.getElementsByClassName("letter");
+
+    for (let i = 0; i < answer.length; i++) {
+
+      if (answer[i] === char && boxes[i].textContent === "") {
+
+        boxes[i].textContent = char;
+
+        found = true;
+
+      }
+
+    }
+
+  }
+
+
+
+  // 자모 검사
+
+  for (let i = 0; i < answer.length; i++) {
+
+    const parts = decompose(answer[i]);
+
+    if (!parts) continue;
+
+    if (parts[0] === char) {
+
+      showMark(i, "green");
+
+      found = true;
+
+    }
+
+    if (parts[1] === char) {
+
+      showMark(i, "yellow");
+
+      found = true;
+
+    }
+
+    if (parts[2] === char) {
+
+      showMark(i, "red");
+
+      found = true;
+
+    }
+
+  }
+
+
+
+  if (!found) {
+
+    lives--;
+
+    showNextHangmanPart();
+
+    if (lives <= 0) {
+
+      gameOver = true;
+
+      alert("실패! 정답은 " + answer);
+
+      const boxes = document.getElementsByClassName("letter");
+
+      for (let i = 0; i < answer.length; i++) {
+
+        boxes[i].textContent = answer[i];
+
+      }
+
+      showRestartButton();
+
+    }
+
+  }
+
+
+
+  if (!gameOver) {
+
+    const boxes = document.getElementsByClassName("letter");
+
+    let allFilled = true;
+
+    for (let i = 0; i < answer.length; i++) {
+
+      if (boxes[i].textContent !== answer[i]) {
+
+        allFilled = false;
+
+        break;
+
+      }
+
+    }
+
+    if (allFilled) {
+
+      gameOver = true;
+
+      alert("성공!");
+
+      showRestartButton();
+
+    }
+
+  }
+
+}
+
+
+
+render();
+
+
+
+const restartBtn = document.getElementById("restartBtn");
+
+
+
+function showRestartButton() {
+
+  restartBtn.style.display = "inline-block";
+
+}
+
+
+
+restartBtn.addEventListener("click", () => {
+
+  window.location.href = "index.html";
+
+});
+
+</script>
+
+
+
+</body>
+
+</html>
+
