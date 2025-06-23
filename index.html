@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>한글 행맨 - 주제 선택</title>
+  <style>
+    body {
+      font-family: '맑은 고딕', sans-serif;
+      background: #fdfaf7;
+      text-align: center;
+      padding: 50px;
+      color: #444;
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 40px;
+      color: #ff7043;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 40px;
+      color: #ff7043;
+    }
+    button {
+      font-size: 24px;
+      padding: 15px 30px;
+      margin: 15px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: #ffab91;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ff7043;
+    }
+  </style>
+</head>
+<body>
+  <h1>한글 행맨 - (Made by 범서) Ver 1.00 A</h1>
+  <h2>주제 선택</h2>
+  <button onclick="startGame('all')">전체 단어</button>
+  <button onclick="startGame('technicalTerms')">전문 용어</button>
+  <button onclick="startGame('animalWords')">동물</button>
+  <button onclick="startGame('computer')">컴퓨터 (준비중)</button>
+  <button onclick="startGame('daily')">오늘의 행맨 (주제 : 원소)</button>
+
+  <script>
+    function startGame(topic) {
+      window.location.href = `game.html?topic=${encodeURIComponent(topic)}`;
+    }
+  </script>
+</body>
+</html>
